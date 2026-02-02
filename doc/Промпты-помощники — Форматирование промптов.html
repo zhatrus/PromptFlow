@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://novasapiens.ru/format-prompt-helper/ -->
+<html lang="ru" data-lt-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Промпты-помощники — Форматирование промптов</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./Промпты-помощники — Форматирование промптов_files/css2" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-code: #0d0d14;
+            --text-primary: #e8e8ed;
+            --text-secondary: #9898a8;
+            --text-muted: #68687a;
+            --accent-1: #7c5cff;
+            --accent-2: #22d3ee;
+            --accent-3: #fb923c;
+            --accent-4: #4ade80;
+            --accent-warning: #fbbf24;
+            --accent-danger: #f87171;
+            --border-color: #2a2a3a;
+            --border-light: #3a3a4a;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+
+        body {
+            font-family: 'Onest', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+
+        /* ГЛОБАЛЬНОЕ правило для ВСЕХ pre и code - переносы строк */
+        pre, code {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            max-width: 100% !important;
+        }
+
+        /* ИСКЛЮЧЕНИЕ: .diagram - горизонтальная прокрутка для схем */
+        .diagram, .diagram pre, .diagram code {
+            white-space: pre !important;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            overflow-x: auto !important;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .header-inner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
+
+        .header-nav { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .header-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .header-nav a:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .header-nav a.active {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-3) 0%, var(--accent-2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border: 1px solid var(--accent-3);
+            box-shadow: 0 0 12px rgba(251, 146, 60, 0.3);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 48px 0 32px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent-4) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p { color: var(--text-secondary); font-size: 1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Helper cards grid */
+        .helpers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            padding: 32px 0;
+        }
+
+        .helper-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .helper-card:hover {
+            border-color: var(--accent-2);
+            transform: translateY(-2px);
+        }
+
+        .helper-num {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            background: var(--accent-2);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        .helper-card h3 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .helper-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Helper detail section */
+        .helper-section {
+            padding: 48px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .helper-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .helper-badge {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-4));
+            color: var(--bg-primary);
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .helper-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .helper-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        /* Code blocks */
+        .code-block {
+            position: relative;
+            margin: 14px 0;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-lang {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--accent-2);
+            border: none;
+            color: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover { background: var(--accent-4); }
+        .copy-btn.copied { background: var(--accent-4); }
+
+        .code-content { padding: 16px; overflow-x: hidden; max-width: 100%; }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Tip boxes */
+        .tip {
+            background: rgba(124, 92, 255, 0.1);
+            border: 1px solid rgba(124, 92, 255, 0.3);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin: 14px 0;
+        }
+
+        .tip-title { font-weight: 600; color: var(--accent-1); margin-bottom: 6px; font-size: 0.9rem; }
+        .tip p { color: var(--text-secondary); font-size: 0.85rem; margin: 0; }
+
+        .tip.success { background: rgba(74, 222, 128, 0.1); border-color: rgba(74, 222, 128, 0.3); }
+        .tip.success .tip-title { color: var(--accent-4); }
+
+        /* Example blocks */
+        .example-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .example-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-3);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .example-block pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            margin: 0;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: hidden;
+            margin: 20px 0;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: fixed; word-break: break-word; }
+        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+        td { color: var(--text-secondary); }
+        tr:last-child td { border-bottom: none; }
+
+        /* Quick templates section */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .template-card {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-card:hover { border-color: var(--accent-2); }
+        .template-card.copied { border-color: var(--accent-4); background: rgba(74, 222, 128, 0.1); }
+
+        .template-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-2);
+            margin-bottom: 8px;
+        }
+
+        .template-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 32px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--accent-2);
+            text-decoration: none;
+        }
+
+        .footer a:hover { text-decoration: underline; }
+
+        /* How to use section */
+        .how-to-use {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .how-to-use h3 {
+            color: var(--accent-4);
+            margin-bottom: 16px;
+        }
+
+        .steps-list {
+            list-style: none;
+        }
+
+        .steps-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .steps-list li:last-child { border-bottom: none; }
+
+        .step-num {
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            background: var(--accent-4);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .step-text { color: var(--text-secondary); font-size: 0.9rem; }
+        .step-text code {
+            background: var(--bg-code);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-3);
+        }
+
+        /* Sidebar Navigation — Helpers Theme (orange/amber accent) */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 52px;
+            width: 240px;
+            height: calc(100vh - 52px);
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, #0f0f14 100%);
+            border-right: 1px solid var(--border-color);
+            padding: 16px 10px;
+            overflow-y: auto;
+            z-index: 50;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hidden { transform: translateX(-100%); }
+
+        .sidebar-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-3);
+            margin-bottom: 12px;
+            padding: 0 8px;
+            font-weight: 700;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.78rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(251, 146, 60, 0.1);
+            color: var(--text-primary);
+        }
+
+        .sidebar-link.active {
+            background: rgba(251, 146, 60, 0.15);
+            color: var(--accent-3);
+        }
+
+        .sidebar-link .helper-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent-3);
+            flex-shrink: 0;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 12px 8px;
+        }
+
+        .sidebar-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .sidebar-back:hover {
+            background: var(--bg-tertiary);
+            color: var(--accent-2);
+        }
+
+        .main-with-sidebar {
+            margin-left: 240px;
+            max-width: none;
+        }
+
+        .main-with-sidebar .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.8rem;
+        }
+
+        /* Sidebar overlay для мобильных */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 40;
+            backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.visible { display: block; }
+
+        /* Кнопка закрытия sidebar */
+        .sidebar-close {
+            display: none;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sidebar-close:hover { background: var(--accent-danger); color: white; border-color: var(--accent-danger); }
+
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.visible { transform: translateX(0); }
+            .main-with-sidebar { margin-left: 0; }
+            .nav-toggle { display: block; }
+            .sidebar-close { display: block; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* MOBILE RESPONSIVE */
+        /* ═══════════════════════════════════════════════════════════════════ */
+
+        @media (max-width: 768px) {
+            /* FIXED HEADER на мобильных */
+            .header {
+                position: fixed;
+                left: 0;
+                right: 0;
+                padding: 10px 0;
+                z-index: 150;
+            }
+
+            /* Компенсация фиксированного header */
+            body {
+                padding-top: 56px;
+            }
+
+            /* Бургер-кнопка - более заметная */
+            .nav-toggle {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                font-size: 1.4rem;
+                background: var(--accent-1);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(124, 92, 255, 0.3);
+            }
+
+            .nav-toggle:active {
+                transform: scale(0.95);
+            }
+
+            /* Header inner - выровнять по левому краю */
+            .header-inner {
+                justify-content: flex-start;
+            }
+
+            .container { padding: 0 16px; }
+
+            .hero { padding: 32px 0 24px; }
+            .hero h1 { font-size: 1.5rem; }
+            .hero p { font-size: 0.9rem; }
+
+            .header-nav { display: none; }
+
+            .helper-section { padding: 32px 0; }
+            .helper-header { gap: 12px; }
+            .helper-badge { width: 36px; height: 36px; line-height: 36px; font-size: 1rem; }
+            .helper-title { font-size: 1.2rem; }
+            .helper-desc { font-size: 0.9rem; }
+
+            .code-content { padding: 12px 14px; }
+            .code-content pre { font-size: 0.75rem; }
+            .code-header { padding: 6px 10px; }
+
+            .tip { padding: 12px 14px; }
+            .tip-title { font-size: 0.85rem; }
+            .tip p { font-size: 0.8rem; }
+
+            .helpers-grid { gap: 12px; padding: 24px 0; }
+            .helper-card { padding: 16px; }
+            .helper-card h3 { font-size: 0.95rem; }
+            .helper-card p { font-size: 0.8rem; }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar { width: 100%; max-width: 320px; }
+            .sidebar-link { padding: 10px 12px; font-size: 0.85rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 12px; }
+
+            .hero { padding: 24px 0 20px; }
+            .hero h1 { font-size: 1.3rem; }
+
+            .helper-section { padding: 24px 0; }
+            .helper-badge { width: 32px; height: 32px; line-height: 32px; font-size: 0.9rem; }
+            .helper-title { font-size: 1.1rem; }
+
+            .code-content { padding: 10px 12px; }
+            .code-content pre { font-size: 0.7rem; line-height: 1.4; }
+            .copy-btn { padding: 3px 8px; font-size: 0.65rem; }
+
+            .helpers-grid { padding: 20px 0; gap: 10px; }
+            .helper-card { padding: 14px; }
+
+            .footer { padding: 32px 0; font-size: 0.8rem; }
+        }
+
+        /* Research link in tips */
+        .research-link {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted currentColor;
+            transition: all 0.2s;
+        }
+        .research-link:hover {
+            color: var(--accent-2);
+            border-bottom-color: var(--accent-2);
+        }
+    </style>
+<style>@font-face {
+              font-family: 'Open Sans Regular';
+              font-style: normal;
+              font-weight: 400;
+              src: url('chrome-extension://gkkdmjjodidppndkbkhhknakbeflbomf/fonts/open_sans/open-sans-v18-latin-regular.woff');
+          }</style><style>@font-face {
+              font-family: 'Open Sans Bold';
+              font-style: normal;
+              font-weight: 800;
+              src: url('chrome-extension://gkkdmjjodidppndkbkhhknakbeflbomf/fonts/open_sans/OpenSans-Bold.woff');
+          }</style><style>@font-face {
+              font-family: 'Open Sans ExtraBold';
+              font-style: normal;
+              font-weight: 800;
+              src: url('chrome-extension://gkkdmjjodidppndkbkhhknakbeflbomf/fonts/open_sans/open-sans-v18-latin-800.woff');
+          }</style></head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <button class="nav-toggle" onclick="toggleSidebar()">☰</button>
+                <nav class="header-nav">
+                    <a href="https://novasapiens.ru/format-prompt-kurs/">📐 Курс</a>
+                    <a href="https://novasapiens.ru/format-prompt-helper/prompt_helpers.html" class="active">🔧 Хелперы</a>
+                    <span style="opacity: 0.3; margin: 0 8px;">|</span>
+                    <a href="https://novasapiens.ru/" target="_blank">🏠 NovaSapiens</a>
+                    <a href="https://t.me/ainovasapiens" target="_blank">📢 Telegram</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay для мобильного меню -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <button class="sidebar-close" onclick="closeSidebar()" aria-label="Закрыть меню">×</button>
+        <div class="sidebar-title">🔧 15 помощников</div>
+
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper1" class="sidebar-link"><span class="helper-badge">1</span>Структуризатор</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper2" class="sidebar-link"><span class="helper-badge">2</span>Псевдокод</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper3" class="sidebar-link"><span class="helper-badge">3</span>Self-Check</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper4" class="sidebar-link"><span class="helper-badge">4</span>ASCII-рамка</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper5" class="sidebar-link"><span class="helper-badge">5</span>JSON-структуризатор</a>
+
+        <div class="sidebar-divider"></div>
+
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper6" class="sidebar-link"><span class="helper-badge">6</span>Few-shot примеры</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper7" class="sidebar-link"><span class="helper-badge">7</span>Prompt Decorators</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper8" class="sidebar-link"><span class="helper-badge">8</span>XML-структуризатор</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper9" class="sidebar-link"><span class="helper-badge">9</span>YAML-конфигуратор</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper10" class="sidebar-link"><span class="helper-badge">10</span>Табличный конвертер</a>
+
+        <div class="sidebar-divider"></div>
+
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper11" class="sidebar-link"><span class="helper-badge">11</span>JSON-схема OUTPUT</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper12" class="sidebar-link"><span class="helper-badge">12</span>Контрастные пары</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper13" class="sidebar-link"><span class="helper-badge">13</span>Приоритизатор 🔴🟡🟢</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper14" class="sidebar-link"><span class="helper-badge">14</span>MetaGlyph</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#helper15" class="sidebar-link"><span class="helper-badge">15</span>Токенный разделитель</a>
+
+        <div class="sidebar-divider"></div>
+
+        <a href="https://novasapiens.ru/format-prompt-helper/#quick-templates" class="sidebar-link">⚡ Быстрые шаблоны</a>
+        <a href="https://novasapiens.ru/format-prompt-helper/#problem-solution" class="sidebar-link">🔍 Проблема → Решение</a>
+
+        <a href="https://novasapiens.ru/format-prompt-kurs/" class="sidebar-back">← К полному курсу</a>
+    </nav>
+
+    <main class="main-with-sidebar">
+        <div class="container">
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Промпты-помощники</h1>
+            <p>15 готовых промптов для форматирования. Конвертеры форматов, генераторы структур. Копируй → вставляй данные → получай результат.</p>
+        </section>
+
+        <!-- Quick navigation -->
+        <div class="helpers-grid">
+            <div class="helper-card" onclick="document.getElementById(&#39;helper1&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">1</div>
+                <h3>Структуризатор</h3>
+                <p>Базовое форматирование: ##, ---, списки, таблицы</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper2&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">2</div>
+                <h3>Генератор псевдокода</h3>
+                <p>Правила текстом → IF/ELSE структура</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper3&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">3</div>
+                <h3>Генератор Self-Check</h3>
+                <p>Создаёт блок самопроверки</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper4&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">4</div>
+                <h3>ASCII-рамка</h3>
+                <p>Оборачивает текст в визуальную рамку</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper5&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">5</div>
+                <h3>JSON-структуризатор</h3>
+                <p>Данные → JSON формат</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper6&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">6</div>
+                <h3>Few-shot генератор</h3>
+                <p>Создаёт примеры для обучения модели</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper7&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">7</div>
+                <h3>Prompt Decorators</h3>
+                <p>20 декораторов управления поведением модели</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper8&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">8</div>
+                <h3>XML-структуризатор</h3>
+                <p>Текст → семантичные XML-теги</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper9&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">9</div>
+                <h3>YAML-конфигуратор</h3>
+                <p>Параметры → YAML-конфиг</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper10&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">10</div>
+                <h3>Табличный конвертер</h3>
+                <p>Данные → Markdown-таблица</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper11&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">11</div>
+                <h3>JSON-схема OUTPUT</h3>
+                <p>Описание → JSON Schema ответа</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper12&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">12</div>
+                <h3>Контрастные пары</h3>
+                <p>Примеры ✅ хорошо / ❌ плохо</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper13&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">13</div>
+                <h3>Приоритизатор 🔴🟡🟢</h3>
+                <p>Правила → с приоритетами</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper14&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">14</div>
+                <h3>MetaGlyph-конвертер</h3>
+                <p>Правила → символьная нотация</p>
+            </div>
+            <div class="helper-card" onclick="document.getElementById(&#39;helper15&#39;).scrollIntoView({behavior: &#39;smooth&#39;})">
+                <div class="helper-num">15</div>
+                <h3>Токенный разделитель</h3>
+                <p>Данные → правильные токены</p>
+            </div>
+        </div>
+
+        <!-- How to use -->
+        <div class="how-to-use">
+            <h3>Как использовать</h3>
+            <ul class="steps-list">
+                <li><span class="step-num">1</span><span class="step-text"><strong>Скопируй</strong> нужный промпт-помощник</span></li>
+                <li><span class="step-num">2</span><span class="step-text"><strong>Замени</strong> <code>{PLACEHOLDER}</code> на свои данные</span></li>
+                <li><span class="step-num">3</span><span class="step-text"><strong>Отправь</strong> в ChatGPT / Claude</span></li>
+                <li><span class="step-num">4</span><span class="step-text"><strong>Получи</strong> готовую структуру</span></li>
+                <li><span class="step-num">5</span><span class="step-text"><strong>Вставь</strong> результат в свой рабочий промпт</span></li>
+            </ul>
+        </div>
+
+        <!-- Helper 1 -->
+        <section class="helper-section" id="helper1">
+            <div class="helper-header">
+                <div class="helper-badge">1</div>
+                <h2 class="helper-title">Структуризатор промпта</h2>
+            </div>
+            <p class="helper-desc">Превращает хаотичный промпт в читаемый формат. Использует только базовые техники форматирования — без XML, без псевдокода.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Преобразуй мой сырой промпт в структурированный формат, используя ТОЛЬКО базовые техники форматирования.
+
+&lt;raw_prompt&gt;
+{ВСТАВЬ СЮДА СВОЙ ПРОМПТ}
+&lt;/raw_prompt&gt;
+
+---
+
+## Техники форматирования (применяй по ситуации)
+
+### 1. Заголовки и секции
+- `## Название` — для основных секций (Задача, Правила, Формат ответа)
+- `### Подзаголовок` — для подсекций внутри блока
+- `---` — разделитель между логическими блоками
+
+### 2. Markdown-разметка
+- **жирный** — для ключевых терминов
+- `бэктики` — для значений, переменных, команд
+- - списки — для перечисления требований
+- 1. нумерация — для последовательности шагов
+- &gt; цитата — для примеров входных данных
+
+### 3. КАПС (экономно!)
+- Используй КАПС только для ОДНОГО критичного запрета
+- Всё остальное — обычным текстом
+
+### 4. Таблица (если есть структурированные данные)
+```
+| Колонка 1 | Колонка 2 | Колонка 3 |
+|-----------|-----------|-----------|
+| значение  | значение  | значение  |
+```
+
+### 5. ASCII-рамка (для неизменяемых правил)
+```
+╔════════════════════════════════════╗
+║  НЕИЗМЕНЯЕМЫЕ ПРАВИЛА              ║
+╠════════════════════════════════════╣
+║  • Правило 1                       ║
+║  • Правило 2                       ║
+╚════════════════════════════════════╝
+```
+
+### 6. Глоссарий (если есть аббревиатуры)
+В начале промпта определи термины:
+```
+## ГЛОССАРИЙ
+CTA = призыв к действию
+USP = уникальное предложение
+TA = целевая аудитория
+```
+
+### 7. Токенное разделение
+- Списки: `элемент1, элемент2, элемент3` (пробел после запятой)
+- Данные: `поле1 | поле2 | поле3` (пайпы для табличных)
+- Числа: `1 234 567` (пробелы в больших числах)
+
+---
+
+## Структура результата
+
+```
+## Задача
+[что нужно сделать — 1-2 предложения]
+
+---
+
+## Правила
+- [правило 1]
+- [правило 2]
+- НИКОГДА [единственный критичный запрет]
+
+---
+
+## Формат ответа
+[как должен выглядеть результат]
+```
+
+---
+
+## Формат ответа
+Готовый промпт в markdown. БЕЗ объяснений — только результат для копирования.</pre>
+                </div>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title">📊 <a href="https://novasapiens.ru/prompt/2504.02052" target="_blank" class="research-link">Исследование 2504.02052</a> (rating 96)</div>
+                <p>Структурированные промпты позволяют слабым моделям достигать уровня сильных. <strong>Форматирование важнее содержания.</strong></p>
+            </div>
+
+            <div class="tip">
+                <div class="tip-title">📊 <a href="https://novasapiens.ru/prompt/2510.26238" target="_blank" class="research-link">Исследование 2510.26238</a> (rating 83)</div>
+                <p>Разделители <code>---</code> между секциями дают <strong>+24% точности</strong>. Три дефиса стоят ноль токенов, но критичны для понимания.</p>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата</div>
+                <pre>## ГЛОССАРИЙ
+WB = Wildberries
+CTA = призыв к действию
+SKU = артикул товара
+
+---
+
+## Задача
+Напиши **описание товара** для карточки на WB.
+
+---
+
+## Правила
+- Длина: 500-700 символов
+- Добавь 3-5 буллетов с характеристиками
+- Emoji: максимум 3 штуки
+- НИКОГДА не используй слово "уникальный"
+
+---
+
+## Данные товара
+
+| Параметр    | Значение               |
+|-------------|------------------------|
+| Название    | Беспроводные наушники  |
+| Бренд       | Sony                   |
+| Модель      | WH-1000XM5             |
+| Цена        | 32 990 ₽               |
+
+---
+
+## Формат ответа
+1. Заголовок (H1)
+2. Описание текстом
+3. Характеристики буллетами
+4. CTA в конце</pre>
+            </div>
+        </section>
+
+        <!-- Helper 2 -->
+        <section class="helper-section" id="helper2">
+            <div class="helper-header">
+                <div class="helper-badge">2</div>
+                <h2 class="helper-title">Генератор псевдокода</h2>
+            </div>
+            <p class="helper-desc">Анализирует текстовые правила и строит логическую IF/ELSE структуру, отражающую СМЫСЛ правил, а не копирующую их формально.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Роль
+Ты — генератор псевдокода. Анализируешь текстовые правила и СТРОИШЬ логическую структуру, которая отражает СМЫСЛ правил, а не копирует их формально.
+
+Запрещено слепо заполнять шаблон. Каждое IF-условие должно быть выведено из смысла входных правил.
+
+---
+
+## Фаза 1: Анализ и валидация
+
+1. Проанализируй правила как систему условий и действий
+2. Выдели: условия, действия, приоритеты, стоп-сценарии
+3. Проверь, все ли параметры заданы однозначно
+
+НЕОПРЕДЕЛЁННЫМ считается правило, которое:
+- не имеет чёткой проверяемой формы
+- допускает несколько трактовок
+- требует порога, но он не указан
+
+Примеры неопределённости: «длинный текст», «допустимый лимит», «при необходимости», «много», «мало»
+
+IF обнаружена неопределённость:
+    → STOP
+    → задай уточняющие вопросы (нумерованный список)
+    → НЕ генерируй псевдокод до получения ответа
+
+---
+
+## Фаза 2: Синтез логики
+
+1. Объедини связанные условия
+2. Раздели взаимоисключающие сценарии (→ SWITCH)
+3. Расставь приоритеты: STOP &gt; модификация &gt; действие по умолчанию
+4. Убери дубли и лишние IF
+
+---
+
+## Фаза 3: Генерация
+
+&lt;task_description&gt;
+{ОПИШИ ЗАДАЧУ: для чего эти правила, что делает промпт, какой контекст использования}
+&lt;/task_description&gt;
+
+&lt;text_rules&gt;
+{ВСТАВЬ СВОИ ПРАВИЛА ОБЫЧНЫМ ТЕКСТОМ}
+&lt;/text_rules&gt;
+
+---
+
+## Формат вывода
+
+1. Сформулируй задачу одним предложением (## Задача: ...)
+2. Выведи готовый псевдокод внутри блока кода (```)
+
+Требования к псевдокоду:
+- генерируй ТОЛЬКО логически необходимые блоки
+- не копируй шаблон построчно
+- DEFAULT/FALLBACK/ALWAYS — только если логически оправданы
+
+Доступные операторы (английский):
+IF, ELSE, AND, OR, NOT, SWITCH, DEFAULT, FALLBACK, ALWAYS, STOP
+
+Все условия, действия и значения — на РУССКОМ языке.
+
+Пример допустимого формата (НЕ шаблон для копирования):
+
+```
+## Задача: генерация ответа на обращение клиента
+
+IF условие:
+    → действие
+
+SWITCH тип_запроса:
+    CASE "тип_1": → действие для типа 1
+    CASE "тип_2": → действие для типа 2
+
+IF критическое_нарушение:
+    → STOP
+    → альтернативное действие
+
+DEFAULT параметр: "значение"
+ALWAYS в конце: → действие
+```
+
+НЕ объясняй. Либо задай уточняющие вопросы, либо выдай готовый промпт в блоке кода.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример входных данных</div>
+                <pre>Задача: написание обучающих статей по программированию
+Правила: «Если в тексте термин — объясни. Не используй сленг.
+Длинные абзацы разбивать. Запрещено "легко" и "быстро". В конце — выводы.»</pre>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">⚡ Уточняющие вопросы (Фаза 1)</div>
+                <pre>Обнаружены неопределённости:
+1. «Длинные абзацы» — какой порог? (&gt;3 предложений? &gt;5?)
+2. «Сленг» — только молодёжный или любой разговорный стиль?
+3. «Термин» — любой технический термин или только впервые встреченный?</pre>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">✅ Готовый промпт (после уточнения)</div>
+                <pre>```
+## Задача: написание обучающей статьи по программированию
+
+IF термин встречается впервые:
+    → дай определение в скобках
+
+IF абзац &gt; 4 предложений:
+    → разбей на 2-3 подабзаца
+
+IF слово является сленгом OR разговорным:
+    → замени на нейтральный аналог
+
+IF хочешь написать "легко" OR "быстро":
+    → STOP
+    → перефразируй без этих слов
+
+DEFAULT тон: "нейтральный, обучающий"
+
+ALWAYS в конце текста:
+    → добавь секцию "## Выводы"
+```</pre>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title">Ключевое отличие</div>
+                <p>Этот промпт НЕ заполняет шаблон механически. Он сначала анализирует смысл правил, находит двусмысленности и уточняет их — только потом генерирует логику. <a href="https://novasapiens.ru/prompt/2507.03254" target="_blank" class="research-link">Исследование 2507.03254</a> (rating 90): псевдокод-промптинг даёт +36% точности при -87% токенов.</p>
+            </div>
+        </section>
+
+        <!-- Helper 3 -->
+        <section class="helper-section" id="helper3">
+            <div class="helper-header">
+                <div class="helper-badge">3</div>
+                <h2 class="helper-title">Генератор Self-Check</h2>
+            </div>
+            <p class="helper-desc">Создаёт блок самопроверки для промпта — модель проверит себя перед отправкой ответа.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Создай блок самопроверки &lt;self_check&gt; для моего промпта.
+
+&lt;prompt_description&gt;
+{ОПИШИ ЧТО ДЕЛАЕТ ТВОЙ ПРОМПТ И КАКИЕ КЛЮЧЕВЫЕ ТРЕБОВАНИЯ}
+&lt;/prompt_description&gt;
+
+## Формат вывода
+```xml
+&lt;self_check&gt;
+Перед отправкой ответа проверь:
+□ [пункт проверки]
+□ [пункт проверки]
+□ [пункт проверки]
+...
+
+Если хоть один пункт НЕ выполнен — исправь ДО отправки.
+&lt;/self_check&gt;
+```
+
+Сгенерируй 5-8 конкретных пунктов проверки. НЕ объясняй — только готовый блок.</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Helper 4 -->
+        <section class="helper-section" id="helper4">
+            <div class="helper-header">
+                <div class="helper-badge">4</div>
+                <h2 class="helper-title">ASCII-рамка</h2>
+            </div>
+            <p class="helper-desc">Оборачивает текст в ASCII-рамку для визуального выделения критичных блоков в промпте.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Оберни текст в ASCII-рамку.
+
+&lt;text&gt;
+{ТВОЙ ТЕКСТ}
+&lt;/text&gt;
+
+&lt;style&gt;double&lt;/style&gt;
+
+Стили:
+- simple: ┌─┐│└─┘
+- double: ╔═╗║╚═╝
+- rounded: ╭─╮│╰─╯
+
+## Формат вывода
+Готовая рамка с текстом внутри. Без объяснений.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата (style: double)</div>
+                <pre>╔══════════════════════════════════════════╗
+║  КРИТИЧЕСКИ ВАЖНО:                       ║
+║  Не используй данные после 2024 года.    ║
+║  Все цены указывай в рублях.             ║
+╚══════════════════════════════════════════╝</pre>
+            </div>
+        </section>
+
+        <!-- Helper 5 -->
+        <section class="helper-section" id="helper5">
+            <div class="helper-header">
+                <div class="helper-badge">5</div>
+                <h2 class="helper-title">JSON-структуризатор данных</h2>
+            </div>
+            <p class="helper-desc">Превращает разрозненные данные в JSON-структуру для промпта.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Преобразуй мои входные данные в JSON-структуру для промпта.
+
+&lt;raw_data&gt;
+{ВСТАВЬ ДАННЫЕ В ЛЮБОМ ФОРМАТЕ — текст, список, таблица}
+&lt;/raw_data&gt;
+
+## Требования
+- Сгруппируй связанные данные
+- Используй понятные ключи на английском
+- Массивы для списков
+- Вложенные объекты где логично
+
+## Формат вывода
+```json
+{
+  // структурированные данные
+}
+```
+
+НЕ объясняй — только готовый JSON для вставки.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример</div>
+                <pre><strong>Вход:</strong>
+"Анализ Apple. Выручка 394 млрд, прибыль 99 млрд.
+Конкуренты Samsung и Google. Сравнить по выручке."
+
+<strong>Выход:</strong>
+{
+  "company": {
+    "name": "Apple",
+    "revenue_usd_billions": 394,
+    "profit_usd_billions": 99
+  },
+  "competitors": ["Samsung", "Google"],
+  "analysis_focus": ["revenue_comparison"]
+}</pre>
+            </div>
+        </section>
+
+        <!-- Helper 6 -->
+        <section class="helper-section" id="helper6">
+            <div class="helper-header">
+                <div class="helper-badge">6</div>
+                <h2 class="helper-title">Генератор Few-shot примеров</h2>
+            </div>
+            <p class="helper-desc">Создаёт структурированные примеры для обучения модели паттерну вход→выход.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Создай few-shot примеры для моей задачи.
+
+&lt;task_description&gt;
+{ОПИШИ ЗАДАЧУ: что на входе, что на выходе, какой формат результата}
+&lt;/task_description&gt;
+
+&lt;example_count&gt;3-5&lt;/example_count&gt;
+
+## Требования
+- Примеры разной сложности (простой → средний → сложный)
+- Покажи edge cases если есть
+- Используй разделитель === между примерами
+- Формат: Вход → Выход
+
+## Формат вывода
+```
+## Примеры (=== разделяет примеры)
+
+Вход: "пример входа 1"
+→ Выход: результат 1
+
+===
+
+Вход: "пример входа 2"
+→ Выход: результат 2
+```
+
+НЕ объясняй — только готовые примеры для вставки.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата</div>
+                <pre>## Примеры (=== разделяет примеры)
+
+Вход: "Не могу войти в аккаунт"
+→ Account, medium
+
+===
+
+Вход: "Двойное списание за подписку"
+→ Billing, high
+
+===
+
+Вход: "Приложение вылетает при запуске"
+→ Technical, high
+
+===
+
+Вход: "Как изменить email и привязать карту?"
+→ Account, medium (основная проблема — настройки)</pre>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title"><a href="https://novasapiens.ru/prompt/2507.10906" target="_blank" class="research-link">Исследование 2507.10906</a> (rating 95)</div>
+                <p>CoT + Few-Shot = максимальная эффективность. Покажи не только результат, но и рассуждение в примерах.</p>
+            </div>
+        </section>
+
+        <!-- Helper 7 -->
+        <section class="helper-section" id="helper7">
+            <div class="helper-header">
+                <div class="helper-badge">7</div>
+                <h2 class="helper-title">Генератор Prompt Decorators</h2>
+            </div>
+            <p class="helper-desc">Подбирает компактные токены управления (+++Decorator) из 20 декораторов двух семейств. Основано на исследовании 2510.19850.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Подбери prompt decorators для моей задачи из двух семейств.
+
+&lt;task_description&gt;
+{ОПИШИ ЧТО ДОЛЖНА ДЕЛАТЬ МОДЕЛЬ}
+&lt;/task_description&gt;
+
+&lt;current_problems&gt;
+{ЧТО ИДЁТ НЕ ТАК — не рассуждает, игнорирует ограничения, формат сбивается}
+&lt;/current_problems&gt;
+
+---
+
+## Семейство 1: Cognitive &amp; Generative (КАК думать)
+
+| Декоратор | Что делает | Параметры |
+|-----------|------------|-----------|
+| +++Reasoning | Пошаговые рассуждения перед ответом | depth=basic/moderate/comprehensive |
+| +++Refine | Итеративное улучшение ответа | iterations=1-5 |
+| +++Debate | Внутренняя дискуссия с разных позиций | perspectives=2-4 |
+| +++Import | Подтянуть знания из домена | domain=legal/medical/tech |
+| +++Verify | Самопроверка перед финальным выводом | criteria=accuracy/completeness |
+| +++Hypothesize | Генерация гипотез | count=3-5 |
+| +++Synthesize | Объединение нескольких источников | — |
+
+## Семейство 2: Expressive &amp; Systemic (КАК выводить)
+
+| Декоратор | Что делает | Параметры |
+|-----------|------------|-----------|
+| +++Tone | Стиль общения | style=formal/casual/technical/friendly |
+| +++OutputFormat | Формат ответа | type=json/markdown/list/table |
+| +++Length | Контроль объёма | target=short/medium/long, max_words=N |
+| +++Priority | Ранжирование по важности | order=desc/asc |
+| +++Audience | Адаптация под читателя | level=beginner/expert/executive |
+| +++Language | Язык вывода | lang=ru/en |
+| +++Confidence | Показывать уверенность | show=true/false |
+
+---
+
+## Формат вывода
+1. Предложи 3-5 декораторов комбинацией:
+   ```
+   +++Decorator1 + +++Decorator2(param=value) + +++Decorator3
+   ```
+2. Для каждого — 1 предложение что он решает.
+3. Покажи пример использования в реальном промпте.
+
+НЕ объясняй теорию — только готовая комбинация декораторов.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример: Аналитический отчёт с разных точек зрения</div>
+                <pre>+++Debate(perspectives=3) + +++Reasoning(depth=comprehensive) + +++Refine(iterations=2)
++++Tone(style=formal) + +++OutputFormat(type=markdown) + +++Length(target=long)
+
+## Применение в промпте:
+
++++Debate(perspectives=3) + +++Reasoning(depth=comprehensive) + +++Refine(iterations=2)
++++Tone(style=formal) + +++OutputFormat(type=markdown)
+
+Проанализируй стратегию выхода компании X на рынок Y.
+Рассмотри с позиций: инвестора, конкурента, регулятора.
+
+&lt;context&gt;
+{ДАННЫЕ О КОМПАНИИ}
+&lt;/context&gt;</pre>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример: Техническая документация для новичков</div>
+                <pre>+++Import(domain=tech) + +++Audience(level=beginner) + +++Verify(criteria=completeness)
++++OutputFormat(type=markdown) + +++Length(max_words=800)
+
+## Применение:
+
++++Import(domain=tech) + +++Audience(level=beginner) + +++Verify
++++OutputFormat(type=markdown) + +++Length(max_words=800)
+
+Объясни архитектуру микросервисов для разработчика,
+который раньше работал только с монолитами.</pre>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title">📊 <a href="https://novasapiens.ru/prompt/2510.19850" target="_blank" class="research-link">Исследование 2510.19850</a> (rating 82)</div>
+                <p>Декораторы — компактные токены типа <code>+++Reasoning</code>, которые управляют обработкой информации моделью. Стекирование декораторов через <code>+</code> позволяет комбинировать эффекты.</p>
+            </div>
+
+            <div class="tip" style="background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3);">
+                <div class="tip-title" style="color: var(--accent-warning);">⚠️ Совместимость</div>
+                <p>Prompt Decorators работают в Claude и GPT-4. В других моделях заменяй на обычные текстовые инструкции: <code>+++Reasoning</code> → "Сначала рассуждай пошагово, затем дай финальный ответ".</p>
+            </div>
+        </section>
+
+        <!-- Helper 8 -->
+        <section class="helper-section" id="helper8">
+            <div class="helper-header">
+                <div class="helper-badge">8</div>
+                <h2 class="helper-title">XML-структуризатор</h2>
+            </div>
+            <p class="helper-desc">Превращает текст с данными вперемешку в чистую XML-структуру с семантичными тегами.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Преобразуй мой текст в XML-структуру с семантичными тегами.
+
+&lt;raw_text&gt;
+{ВСТАВЬ ТЕКСТ С ДАННЫМИ — инструкции, контекст, параметры вперемешку}
+&lt;/raw_text&gt;
+
+---
+
+## Правила создания тегов
+
+1. **Имена тегов = смысл содержимого**
+   - ✅ &lt;customer_complaint&gt;, &lt;product_specs&gt;, &lt;deadline&gt;
+   - ❌ &lt;data1&gt;, &lt;text&gt;, &lt;info&gt;
+
+2. **Стандартные теги** (используй где подходят):
+   - &lt;role&gt; — роль/персона модели
+   - &lt;task&gt; — что нужно сделать
+   - &lt;context&gt; — фоновая информация
+   - &lt;input&gt; — данные для обработки
+   - &lt;constraints&gt; — ограничения
+   - &lt;output_format&gt; — формат результата
+   - &lt;examples&gt; — примеры
+
+3. **Вложенность** — группируй связанные данные:
+   ```
+   &lt;customer&gt;
+     &lt;name&gt;...&lt;/name&gt;
+     &lt;history&gt;...&lt;/history&gt;
+   &lt;/customer&gt;
+   ```
+
+4. **Атрибуты** — для метаданных:
+   ```
+   &lt;document type="contract" priority="high"&gt;...&lt;/document&gt;
+   ```
+
+---
+
+## Формат ответа
+Готовая XML-структура. БЕЗ объяснений — только результат.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата</div>
+                <pre>&lt;role&gt;
+Ты — юридический консультант с 10-летним опытом.
+&lt;/role&gt;
+
+&lt;task&gt;
+Проанализируй договор и найди потенциальные риски для клиента.
+&lt;/task&gt;
+
+&lt;contract type="аренда" pages="12"&gt;
+{текст договора}
+&lt;/contract&gt;
+
+&lt;client_concerns&gt;
+- Скрытые платежи
+- Условия расторжения
+- Ответственность сторон
+&lt;/client_concerns&gt;
+
+&lt;output_format&gt;
+Список рисков с указанием пункта договора и рекомендацией.
+&lt;/output_format&gt;</pre>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title"><a href="https://novasapiens.ru/prompt/2505.13546" target="_blank" class="research-link">Исследование 2505.13546</a> (rating 90)</div>
+                <p>Разделение на независимые XML-блоки делает промпт устойчивым к изменениям — можно менять один блок, не ломая остальные.</p>
+            </div>
+        </section>
+
+        <!-- Helper 9 -->
+        <section class="helper-section" id="helper9">
+            <div class="helper-header">
+                <div class="helper-badge">9</div>
+                <h2 class="helper-title">YAML-конфигуратор</h2>
+            </div>
+            <p class="helper-desc">Превращает текстовые параметры и настройки в чистый YAML-конфиг.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Преобразуй мои текстовые параметры в YAML-конфигурацию.
+
+&lt;raw_parameters&gt;
+{ВСТАВЬ ПАРАМЕТРЫ ТЕКСТОМ — тон, длина, ограничения, настройки}
+&lt;/raw_parameters&gt;
+
+---
+
+## Правила YAML
+
+1. **Группировка по смыслу:**
+   ```yaml
+   output:
+     format: json
+     language: ru
+     max_length: 500
+   ```
+
+2. **Списки через дефис:**
+   ```yaml
+   forbidden_words:
+     - "очевидно"
+     - "просто"
+     - "легко"
+   ```
+
+3. **Вложенность для сложных правил:**
+   ```yaml
+   tone:
+     style: professional
+     exceptions:
+       - context: "приветствие"
+         style: friendly
+   ```
+
+4. **Булевы значения:** `true/false` (не "да/нет")
+
+5. **Числа без кавычек:** `max_tokens: 1000`
+
+---
+
+## Формат ответа
+Готовый YAML-блок. БЕЗ объяснений — только конфиг.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Вход → Выход</div>
+                <pre><strong>Вход:</strong>
+"Пиши на русском, тон деловой но не сухой, длина ответа
+300-500 слов, избегай канцеляризмов, формат markdown,
+в конце всегда резюме из 2-3 пунктов"
+
+<strong>Выход:</strong>
+```yaml
+output:
+  language: ru
+  format: markdown
+  length:
+    min_words: 300
+    max_words: 500
+
+tone:
+  style: business_friendly
+  avoid:
+    - канцеляризмы
+    - сухой_официоз
+
+structure:
+  ending:
+    type: summary
+    points: 2-3
+```</pre>
+            </div>
+        </section>
+
+        <!-- Helper 10 -->
+        <section class="helper-section" id="helper10">
+            <div class="helper-header">
+                <div class="helper-badge">10</div>
+                <h2 class="helper-title">Табличный конвертер</h2>
+            </div>
+            <p class="helper-desc">Превращает любые данные в Markdown-таблицу с пайпами. +40% точности по исследованиям.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Преобразуй мои данные в Markdown-таблицу.
+
+&lt;raw_data&gt;
+{ВСТАВЬ ДАННЫЕ — список, текст, JSON, что угодно}
+&lt;/raw_data&gt;
+
+&lt;table_purpose&gt;
+{ОПИШИ ДЛЯ ЧЕГО ТАБЛИЦА — сравнение, справочник, анализ}
+&lt;/table_purpose&gt;
+
+---
+
+## Правила форматирования
+
+1. **Заголовки** — краткие, информативные (1-3 слова)
+2. **Выравнивание:**
+   - Текст → по левому краю `:---`
+   - Числа → по правому краю `---:`
+   - Центр → `:-:` (для статусов, флагов)
+
+3. **Сортировка** — по важности или алфавиту
+4. **Пустые ячейки** — `—` (не оставлять пустыми)
+
+---
+
+## Формат ответа
+Готовая Markdown-таблица. БЕЗ объяснений.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Вход → Выход</div>
+                <pre><strong>Вход:</strong>
+"У нас 3 тарифа: Базовый за 990 руб без поддержки,
+Стандарт за 1990 с email поддержкой и 50 ГБ,
+Премиум за 4990 с приоритетной поддержкой 24/7 и 500 ГБ"
+
+<strong>Выход:</strong>
+| Тариф    | Цена, ₽ | Хранилище | Поддержка          |
+|:---------|--------:|:---------:|:-------------------|
+| Базовый  |     990 |     —     | —                  |
+| Стандарт |   1 990 |   50 ГБ   | Email              |
+| Премиум  |   4 990 |  500 ГБ   | Приоритет 24/7     |</pre>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title"><a href="https://novasapiens.ru/prompt/2412.17189" target="_blank" class="research-link">Исследование 2412.17189</a> (rating 96)</div>
+                <p>Табличная структура значительно улучшает понимание моделью — используй таблицы для структурированных данных.</p>
+            </div>
+        </section>
+
+        <!-- Helper 11 -->
+        <section class="helper-section" id="helper11">
+            <div class="helper-header">
+                <div class="helper-badge">11</div>
+                <h2 class="helper-title">JSON-схема OUTPUT</h2>
+            </div>
+            <p class="helper-desc">Создаёт JSON Schema для контроля формата ответа модели.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Создай JSON-схему для формата ответа модели.
+
+&lt;output_description&gt;
+{ОПИШИ КАКИЕ ПОЛЯ НУЖНЫ В ОТВЕТЕ И ИХ ТИПЫ}
+&lt;/output_description&gt;
+
+&lt;strictness&gt;strict&lt;/strictness&gt;
+
+---
+
+## Уровни строгости
+
+### MINIMAL — только структура
+```json
+{
+  "field_name": "тип или пример"
+}
+```
+
+### STANDARD — с типами и описаниями
+```json
+{
+  "field_name": {
+    "type": "string|number|boolean|array|object",
+    "description": "что это поле означает"
+  }
+}
+```
+
+### STRICT — полная JSON Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "field_name": {
+      "type": "string",
+      "description": "...",
+      "enum": ["вариант1", "вариант2"]
+    }
+  },
+  "required": ["field_name"]
+}
+```
+
+---
+
+## Правила
+
+1. **Имена полей** — snake_case на английском
+2. **Обязательные поля** — помечай в `required`
+3. **Enum** — для полей с фиксированным набором значений
+4. **Вложенность** — для группировки связанных данных
+5. **Массивы** — указывай тип элементов: `"items": {"type": "string"}`
+
+---
+
+## Формат ответа
+1. JSON-схема выбранного уровня строгости
+2. Пример заполненного JSON (для проверки)</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример STRICT</div>
+                <pre>```json
+{
+  "type": "object",
+  "properties": {
+    "sentiment": {
+      "type": "string",
+      "enum": ["positive", "negative", "neutral"],
+      "description": "Общая тональность текста"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Уверенность в оценке (0-1)"
+    },
+    "emotions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Список обнаруженных эмоций"
+    }
+  },
+  "required": ["sentiment", "confidence"]
+}
+```</pre>
+            </div>
+        </section>
+
+        <!-- Helper 12 -->
+        <section class="helper-section" id="helper12">
+            <div class="helper-header">
+                <div class="helper-badge">12</div>
+                <h2 class="helper-title">Генератор контрастных пар</h2>
+            </div>
+            <p class="helper-desc">Создаёт пары примеров ✅ правильно / ❌ неправильно для обучения модели.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Создай контрастные пары примеров для моей задачи.
+
+&lt;task_description&gt;
+{ОПИШИ ЗАДАЧУ: что модель должна делать}
+&lt;/task_description&gt;
+
+&lt;quality_criteria&gt;
+{ЧТО ОТЛИЧАЕТ ХОРОШИЙ ОТВЕТ ОТ ПЛОХОГО}
+&lt;/quality_criteria&gt;
+
+&lt;pairs_count&gt;3&lt;/pairs_count&gt;
+
+---
+
+## Правила создания пар
+
+1. **Один вход — два выхода:**
+   ```
+   Вход: "текст запроса"
+   ❌ Плохо: [почему плохо]
+   ✅ Хорошо: [почему хорошо]
+   ```
+
+2. **Типы ошибок для ❌:**
+   - Неполный ответ
+   - Неправильный формат
+   - Нарушение тона/стиля
+   - Фактическая ошибка
+   - Лишняя информация
+
+3. **Комментарии** — кратко объясни разницу в скобках
+
+4. **Разделитель** между парами: `===`
+
+---
+
+## Формат ответа
+Готовые контрастные пары. БЕЗ объяснений — только примеры.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата</div>
+                <pre>## Контрастные пары
+
+Вход: "Напиши описание товара: беспроводные наушники Sony WH-1000XM5"
+
+❌ Плохо: "Хорошие наушники, советую купить."
+   (слишком коротко, нет характеристик, субъективно)
+
+✅ Хорошо: "Беспроводные наушники Sony WH-1000XM5 с активным
+шумоподавлением. Время работы до 30 часов, быстрая зарядка
+(3 мин = 3 часа музыки). Поддержка LDAC для Hi-Res Audio."
+   (конкретные характеристики, объективно, информативно)
+
+===
+
+Вход: "Напиши описание товара: кофемашина DeLonghi Magnifica"
+
+❌ Плохо: "DeLonghi Magnifica — это автоматическая кофемашина
+итальянского бренда DeLonghi, которая готовит кофе автоматически
+и имеет множество функций для приготовления различных напитков."
+   (вода, повторы, нет конкретики)
+
+✅ Хорошо: "Автоматическая кофемашина DeLonghi Magnifica:
+помол зёрен, 15 бар давления, капучинатор. Объём резервуара
+1.8 л, регулировка крепости и температуры."
+   (конкретные характеристики, без воды)</pre>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title"><a href="https://novasapiens.ru/prompt/2501.16150" target="_blank" class="research-link">Исследование 2501.16150</a> (rating 90)</div>
+                <p>Контрастные пары эффективнее, чем только положительные примеры — модель учится различать границу качества.</p>
+            </div>
+        </section>
+
+        <!-- Helper 13 -->
+        <section class="helper-section" id="helper13">
+            <div class="helper-header">
+                <div class="helper-badge">13</div>
+                <h2 class="helper-title">Приоритизатор правил 🔴🟡🟢</h2>
+            </div>
+            <p class="helper-desc">Расставляет приоритеты правилам: 🔴 КРИТИЧНО → 🟡 ВАЖНО → 🟢 ЖЕЛАТЕЛЬНО.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Расставь приоритеты моим правилам по уровням критичности.
+
+&lt;rules_list&gt;
+{ВСТАВЬ СПИСОК ПРАВИЛ БЕЗ ПРИОРИТЕТОВ}
+&lt;/rules_list&gt;
+
+&lt;context&gt;
+{ОПИШИ КОНТЕКСТ: для чего эти правила, что критично}
+&lt;/context&gt;
+
+---
+
+## Уровни приоритета
+
+### 🔴 КРИТИЧНО (нарушение = провал)
+- Безопасность, юридические требования
+- Ключевая функциональность
+- Запреты, которые нельзя нарушать
+
+### 🟡 ВАЖНО (нарушение = снижение качества)
+- Формат вывода
+- Тон и стиль
+- Полнота ответа
+
+### 🟢 ЖЕЛАТЕЛЬНО (nice to have)
+- Оптимизации
+- Улучшения UX
+- Дополнительные детали
+
+---
+
+## Правила приоритизации
+
+1. Если правило связано с безопасностью → 🔴
+2. Если нарушение видно пользователю сразу → 🟡
+3. Если нарушение незначительно влияет на результат → 🟢
+4. Максимум 3-4 правила на уровень 🔴
+5. Группируй связанные правила
+
+---
+
+## Формат ответа
+```
+### 🔴 КРИТИЧНО
+1. правило
+2. правило
+
+### 🟡 ВАЖНО
+3. правило
+4. правило
+
+### 🟢 ЖЕЛАТЕЛЬНО
+5. правило
+```
+
+БЕЗ объяснений — только готовый список с приоритетами.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата</div>
+                <pre>### 🔴 КРИТИЧНО
+1. НЕ выдавать персональные данные пользователей
+2. НЕ давать медицинские/юридические советы как факты
+3. Формат ответа строго JSON
+
+### 🟡 ВАЖНО
+4. Тон: дружелюбный, но профессиональный
+5. Длина ответа: 100-300 слов
+6. Отвечать на русском языке
+
+### 🟢 ЖЕЛАТЕЛЬНО
+7. Использовать emoji где уместно
+8. Добавлять ссылки на документацию
+9. Предлагать связанные темы</pre>
+            </div>
+
+            <div class="tip">
+                <div class="tip-title"><a href="https://novasapiens.ru/prompt/2502.17204" target="_blank" class="research-link">Исследование 2502.17204</a> (rating 96)</div>
+                <p>Порядок ограничений критичен! Размещай 🔴 правила в начале промпта — модель лучше их запоминает.</p>
+            </div>
+        </section>
+
+        <!-- Helper 14 -->
+        <section class="helper-section" id="helper14">
+            <div class="helper-header">
+                <div class="helper-badge">14</div>
+                <h2 class="helper-title">MetaGlyph-конвертер</h2>
+            </div>
+            <p class="helper-desc">Превращает текстовые правила в компактную символьную нотацию MetaGlyph.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Преобразуй мои текстовые правила в нотацию MetaGlyph.
+
+&lt;text_rules&gt;
+{ВСТАВЬ ПРАВИЛА ОБЫЧНЫМ ТЕКСТОМ}
+&lt;/text_rules&gt;
+
+---
+
+## Синтаксис MetaGlyph
+
+### Базовые символы
+- `→` — следствие, результат
+- `|` — ИЛИ (альтернативы)
+- `&amp;` — И (все условия)
+- `!` — НЕ (отрицание)
+- `?` — опционально
+- `*` — любое количество
+- `+` — один или более
+- `∅` — пусто, ничего
+
+### Скобки
+- `{}` — условие/контекст
+- `[]` — опциональный блок
+- `()` — группировка
+- `&lt;&gt;` — плейсхолдер/переменная
+
+### Модификаторы
+- `⚠️` — предупреждение
+- `🔴` — критично/запрет
+- `✓` — обязательно
+- `≈` — примерно/около
+- `∈` — принадлежит множеству
+
+### Паттерн правила
+```
+{условие} → действие [модификатор]
+```
+
+---
+
+## Примеры преобразования
+
+Текст: "Если цена больше 10000, пометить как премиум"
+MetaGlyph: `{price &gt; 10000} → label: "премиум"`
+
+Текст: "Ответ должен быть на русском или английском"
+MetaGlyph: `lang ∈ {ru | en} ✓`
+
+Текст: "Никогда не упоминать конкурентов"
+MetaGlyph: `🔴 !mention(&lt;competitors&gt;)`
+
+---
+
+## Формат ответа
+Готовые правила в нотации MetaGlyph. БЕЗ объяснений.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата</div>
+                <pre><strong>Вход:</strong>
+"Если вопрос про цены — отвечай кратко, до 50 слов.
+Если технический вопрос — можно подробно, до 300 слов.
+Никогда не называй конкретные даты релизов.
+Добавляй ссылку на документацию если есть."
+
+<strong>Выход:</strong>
+```metaglyph
+{topic = "цены"} → length ≤ 50 words
+{topic = "техническое"} → length ≤ 300 words
+🔴 !mention(&lt;release_dates&gt;)
+[docs_link] → append(📄 &lt;url&gt;) ?
+```</pre>
+            </div>
+
+            <div class="tip" style="background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3);">
+                <div class="tip-title" style="color: var(--accent-warning);">⚠️ Продвинутая техника</div>
+                <p>MetaGlyph экономит токены и улучшает точность, но требует привыкания. Начни с простых правил.</p>
+            </div>
+        </section>
+
+        <!-- Helper 15 -->
+        <section class="helper-section" id="helper15">
+            <div class="helper-header">
+                <div class="helper-badge">15</div>
+                <h2 class="helper-title">Токенный разделитель</h2>
+            </div>
+            <p class="helper-desc">Форматирует данные с правильным разделением токенов — пробелы, запятые, переносы строк.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Промпт-помощник</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <div class="code-content">
+                    <pre>## Задача
+Отформатируй мои данные с правильным токенным разделением.
+
+&lt;raw_data&gt;
+{ВСТАВЬ ДАННЫЕ — числа, списки, категории}
+&lt;/raw_data&gt;
+
+&lt;data_type&gt;
+{ТИП ДАННЫХ: числа | категории | список | смешанный}
+&lt;/data_type&gt;
+
+---
+
+## Правила разделения
+
+### Числа
+❌ Плохо: `123456789` (один токен, модель не "видит" структуру)
+✅ Хорошо: `123 456 789` или `123,456,789`
+
+### Списки элементов
+❌ Плохо: `яблоко,груша,банан` (слипается)
+✅ Хорошо: `яблоко, груша, банан` (пробел после запятой)
+
+### Категории/теги
+❌ Плохо: `#тег1#тег2#тег3`
+✅ Хорошо: `#тег1 #тег2 #тег3` или построчно
+
+### ID и коды
+❌ Плохо: `USR-12345-ABC`
+✅ Хорошо: `USR - 12345 - ABC` (пробелы вокруг дефисов)
+
+### Длинный текст для анализа
+- Разбивай на абзацы (пустая строка)
+- Нумеруй если порядок важен: `1. ... 2. ...`
+
+---
+
+## Формат ответа
+Отформатированные данные с правильным разделением. БЕЗ объяснений.</pre>
+                </div>
+            </div>
+
+            <div class="example-block">
+                <div class="example-label">Пример результата</div>
+                <pre><strong>Вход:</strong>
+"ID:USR-98765-XYZ сумма:1234567 категории:электроника,бытовая техника,гаджеты"
+
+<strong>Выход:</strong>
+ID: USR - 98765 - XYZ
+Сумма: 1 234 567
+Категории: электроника, бытовая техника, гаджеты</pre>
+            </div>
+
+            <div class="tip success">
+                <div class="tip-title"><a href="https://novasapiens.ru/prompt/2505.14178" target="_blank" class="research-link">Исследование 2505.14178</a> (rating 95)</div>
+                <p>Правильное разделение токенов драматически улучшает точность на аналитических задачах — модель лучше "видит" отдельные элементы.</p>
+            </div>
+        </section>
+
+        <!-- Quick templates -->
+        <section class="helper-section" id="quick-templates">
+            <h2 class="helper-title" style="margin-bottom: 20px;">Быстрые шаблоны</h2>
+            <p class="helper-desc">Кликни чтобы скопировать</p>
+
+            <div class="templates-grid">
+                <div class="template-card" onclick="copyTemplate(this, &#39;&lt;тег&gt;\n{данные}\n&lt;/тег&gt;&#39;)">
+                    <div class="template-label">XML-тег</div>
+                    <div class="template-code">&lt;тег&gt;{данные}&lt;/тег&gt;</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;IF {условие}:\n    → {действие}&#39;)">
+                    <div class="template-label">Правило</div>
+                    <div class="template-code">IF условие:<br>    → действие</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;□ {что проверить}?&#39;)">
+                    <div class="template-label">Self-check пункт</div>
+                    <div class="template-code">□ что проверить?</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;---&#39;)">
+                    <div class="template-label">Разделитель секций</div>
+                    <div class="template-code">---</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;===&#39;)">
+                    <div class="template-label">Few-shot разделитель</div>
+                    <div class="template-code">===</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;Вход: \" {входные="" данные}\"\n→="" {результат}')"="">
+                    <div class="template-label">Вход→Выход</div>
+                    <div class="template-code">Вход: "..."<br>→ результат</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;**ВАЖНО:** &#39;)">
+                    <div class="template-label">Акцент</div>
+                    <div class="template-code">**ВАЖНО:** текст</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;&lt;context&gt;\n\n&lt;/context&gt;&#39;)">
+                    <div class="template-label">Контекст</div>
+                    <div class="template-code">&lt;context&gt;...&lt;/context&gt;</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;DEFAULT {параметр}: \" {значение}\"')"="">
+                    <div class="template-label">DEFAULT</div>
+                    <div class="template-code">DEFAULT тон: "нейтральный"</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;FALLBACK: \" {значение}\"')"="">
+                    <div class="template-label">FALLBACK</div>
+                    <div class="template-code">FALLBACK: "не указано"</div>
+                </div>
+                <div class="template-card" onclick="copyTemplate(this, &#39;+++Reasoning\n+++Tone(style=formal)&#39;)">
+                    <div class="template-label">Decorators</div>
+                    <div class="template-code">+++Reasoning<br>+++Tone(style=...)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage table -->
+        <section class="helper-section" id="problem-solution">
+            <h2 class="helper-title" style="margin-bottom: 20px;">Когда какой помощник использовать</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Проблема</th>
+                            <th>Помощник</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Промпт-простыня, всё в кучу</td>
+                            <td><strong>#1 Структуризатор</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Модель игнорирует правила</td>
+                            <td><strong>#2 Генератор псевдокода</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ответы неполные или с ошибками</td>
+                            <td><strong>#3 Генератор Self-Check</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Нужно выделить критичное</td>
+                            <td><strong>#4 ASCII-рамка</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Много входных данных</td>
+                            <td><strong>#5 JSON-структуризатор</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Нужны примеры для модели</td>
+                            <td><strong>#6 Few-shot генератор</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Модель отвечает не в том стиле/тоне</td>
+                            <td><strong>#7 Prompt Decorators</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Модель не показывает рассуждения</td>
+                            <td><strong>#7 Prompt Decorators</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ответы слишком короткие/длинные</td>
+                            <td><strong>#7 Prompt Decorators</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Данные и инструкции вперемешку</td>
+                            <td><strong>#8 XML-структуризатор</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Много параметров и настроек</td>
+                            <td><strong>#9 YAML-конфигуратор</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Сравнение, справочник, списки</td>
+                            <td><strong>#10 Табличный конвертер</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Нужен строгий формат ответа</td>
+                            <td><strong>#11 JSON-схема OUTPUT</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Модель не понимает границу качества</td>
+                            <td><strong>#12 Контрастные пары</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Какие правила важнее других?</td>
+                            <td><strong>#13 Приоритизатор 🔴🟡🟢</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Слишком много токенов на правила</td>
+                            <td><strong>#14 MetaGlyph-конвертер</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Модель плохо "видит" числа/списки</td>
+                            <td><strong>#15 Токенный разделитель</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Часть <a href="https://novasapiens.ru/format-prompt-kurs/">Курса форматирования промптов</a></p>
+            <p style="margin-top: 8px;">15 помощников для форматирования промптов</p>
+        </footer>
+        </div><!-- /.container -->
+    </main>
+
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-block');
+            const code = codeBlock.querySelector('pre').textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Скопировано!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Копировать';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function copyTemplate(card, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                card.classList.add('copied');
+                setTimeout(() => {
+                    card.classList.remove('copied');
+                }, 1000);
+            });
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('visible');
+            overlay.classList.toggle('visible');
+            document.body.style.overflow = sidebar.classList.contains('visible') ? 'hidden' : '';
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('visible');
+            overlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+
+        // Закрывать sidebar при клике на ссылку
+        document.querySelectorAll('.sidebar .sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Highlight active nav link on scroll
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const sections = document.querySelectorAll('.helper-section');
+
+        function highlightActiveLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightActiveLink);
+
+        // Close sidebar on mobile when clicking a link
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    document.getElementById('sidebar').classList.remove('visible');
+                }
+            });
+        });
+    </script>
+
+
+</body></html>
