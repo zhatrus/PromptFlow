@@ -3,155 +3,130 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-
-const courseData: Record<string, { title: string; techniques: Array<{ name: string; description: string }> }> = {
-  "1": {
-    title: "Організація промпта",
-    techniques: [
-      { name: "Заголовки секцій", description: "Використовуйте заголовки для структуризації промпта" },
-      { name: "Нумеровані списки", description: "Впорядковуйте інструкції за допомогою нумерації" },
-      { name: "Маркеровані списки", description: "Групуйте пов'язані пункти" },
-      { name: "Розділювачі", description: "Візуально відокремлюйте секції" },
-      { name: "Відступи", description: "Створюйте ієрархію за допомогою відступів" },
-      { name: "Порожні рядки", description: "Покращуйте читабельність" },
-      { name: "Коментарі", description: "Додавайте пояснення до секцій" },
-      { name: "Мітки секцій", description: "Іменуйте блоки для легкого посилання" },
-    ],
-  },
-  "2": {
-    title: "Подача даних",
-    techniques: [
-      { name: "Контекст на початку", description: "Розміщуйте фоновий контекст першим" },
-      { name: "Структуровані дані", description: "Використовуйте JSON, XML, YAML для даних" },
-      { name: "Приклади даних", description: "Показуйте формат очікуваних даних" },
-      { name: "Змінні та плейсхолдери", description: "Позначайте місця для підстановки" },
-      { name: "Посилання на дані", description: "Вказуйте на джерела інформації" },
-    ],
-  },
-  "3": {
-    title: "Опис правил",
-    techniques: [
-      { name: "Явні інструкції", description: "Формулюйте правила чітко та однозначно" },
-      { name: "Негативні правила", description: "Вказуйте що НЕ робити" },
-      { name: "Умовні правила", description: "Використовуйте if/then/else логіку" },
-      { name: "Пріоритети правил", description: "Вказуйте важливість правил" },
-      { name: "Обмеження", description: "Встановлюйте границі поведінки" },
-      { name: "Винятки", description: "Описуйте особливі випадки" },
-    ],
-  },
-  "4": {
-    title: "Контроль формату відповіді",
-    techniques: [
-      { name: "Шаблон відповіді", description: "Надавайте структуру для заповнення" },
-      { name: "JSON Output", description: "Вимагайте JSON формат відповіді" },
-      { name: "Markdown форматування", description: "Вказуйте використання Markdown" },
-      { name: "Довжина відповіді", description: "Обмежуйте кількість слів/символів" },
-      { name: "Стиль мови", description: "Вказуйте формальність та тон" },
-      { name: "Структура секцій", description: "Визначайте розділи відповіді" },
-      { name: "Приклад виводу", description: "Показуйте бажаний результат" },
-      { name: "Валідація", description: "Додавайте self-check блоки" },
-    ],
-  },
-  "5": {
-    title: "Лексика і синтаксис",
-    techniques: [
-      { name: "Імперативний стиль", description: "Використовуйте дієслова-накази: зроби, напиши, проаналізуй" },
-      { name: "Конкретна лексика", description: "Уникайте розмитих формулювань" },
-      { name: "Технічні терміни", description: "Використовуйте доменну термінологію" },
-      { name: "Послідовність часів", description: "Дотримуйтесь єдиного часу дієслів" },
-      { name: "Активний стан", description: "Перевага активному стану над пасивним" },
-      { name: "Короткі речення", description: "Одна думка — одне речення" },
-      { name: "Уникання двозначності", description: "Формулюйте так, щоб було лише одне тлумачення" },
-    ],
-  },
-  "6": {
-    title: "Few-shot приклади",
-    techniques: [
-      { name: "Вхід-вихід пари", description: "Показуйте input та очікуваний output" },
-      { name: "Різноманітність прикладів", description: "Покривайте різні сценарії" },
-      { name: "Контрастні приклади", description: "Показуйте правильно vs неправильно" },
-      { name: "Градація складності", description: "Від простих до складних прикладів" },
-      { name: "Коментування прикладів", description: "Пояснюйте чому саме такий результат" },
-    ],
-  },
-  "7": {
-    title: "Лайфхаки",
-    techniques: [
-      { name: "Chain of Thought", description: "Просіть модель думати покроково" },
-      { name: "Role prompting", description: "Призначайте роль/персону моделі" },
-      { name: "Температура та параметри", description: "Налаштовуйте креативність відповідей" },
-      { name: "Ітеративне уточнення", description: "Покращуйте промпт через діалог" },
-      { name: "Розбиття на підзадачі", description: "Складні задачі → прості кроки" },
-    ],
-  },
-};
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, ArrowRight, Lock, Lightbulb } from "lucide-react";
+import { courseContent } from "@/data/course-content";
+import { CopyButton } from "@/components/copy-button";
 
 export default async function CoursePartPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const data = courseData[id];
+  const part = courseContent.find((p) => p.id === id);
 
-  if (!data) {
+  if (!part) {
     notFound();
   }
 
-  const partNumber = parseInt(id);
-  const prevPart = partNumber > 1 ? partNumber - 1 : null;
-  const nextPart = partNumber < 7 ? partNumber + 1 : null;
+  if (part.locked) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-20">
+        <Lock className="h-16 w-16 text-muted-foreground" />
+        <h1 className="text-2xl font-bold">{part.title}</h1>
+        <p className="text-muted-foreground text-center max-w-md">
+          Ця частина курсу ще в розробці. Скоро буде доступна!
+        </p>
+        <Button asChild>
+          <Link href="/course">Повернутися до курсу</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  const partIndex = courseContent.findIndex((p) => p.id === id);
+  const prevPart = partIndex > 0 ? courseContent[partIndex - 1] : null;
+  const nextPart = partIndex < courseContent.length - 1 ? courseContent[partIndex + 1] : null;
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl mx-auto">
+    <div className="flex flex-col gap-6 max-w-4xl mx-auto">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Link href="/course" className="hover:text-primary">
           Курс
         </Link>
         <span>/</span>
-        <span>Частина {id}</span>
+        <span>{part.title}</span>
       </div>
 
       <div>
-        <Badge variant="outline" className="mb-2">
-          Частина {id} з 7
+        <Badge 
+          variant="outline" 
+          className="mb-2"
+          style={{ borderColor: part.color, color: part.color }}
+        >
+          Частина {part.num} з 7
         </Badge>
-        <h1 className="text-3xl font-bold">{data.title}</h1>
-        <p className="text-muted-foreground mt-2">
-          {data.techniques.length} технік форматування
-        </p>
+        <h1 className="text-3xl font-bold">{part.title}</h1>
+        <p className="text-muted-foreground mt-2">{part.subtitle}</p>
       </div>
 
       <Separator />
 
-      <div className="space-y-6">
-        {data.techniques.map((technique, index) => (
-          <div key={index} className="space-y-2">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary text-sm">
-                {index + 1}
-              </span>
-              {technique.name}
-            </h3>
-            <p className="text-muted-foreground pl-8">{technique.description}</p>
-          </div>
+      <div className="space-y-8">
+        {part.techniques.map((technique) => (
+          <Card key={technique.id} id={technique.id}>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <span 
+                  className="flex items-center justify-center w-10 h-10 rounded-lg text-sm font-bold"
+                  style={{ backgroundColor: `${part.color}20`, color: part.color }}
+                >
+                  {technique.num}
+                </span>
+                <div>
+                  <CardTitle>{technique.title}</CardTitle>
+                  <p className="text-sm text-muted-foreground">{technique.description}</p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="whitespace-pre-line">{technique.content}</p>
+              
+              {technique.codeExamples && technique.codeExamples.length > 0 && (
+                <div className="space-y-3">
+                  {technique.codeExamples.map((example, idx) => (
+                    <div key={idx} className="relative">
+                      <div className="flex items-center justify-between bg-muted px-3 py-1.5 rounded-t-lg border border-b-0">
+                        <span className="text-xs text-muted-foreground">{example.title}</span>
+                        <CopyButton text={example.code} />
+                      </div>
+                      <pre className="bg-muted/50 p-4 rounded-b-lg border overflow-x-auto text-sm">
+                        <code>{example.code}</code>
+                      </pre>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {technique.tips && technique.tips.length > 0 && (
+                <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <Lightbulb className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    {technique.tips.map((tip, idx) => (
+                      <p key={idx}>{tip}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         ))}
       </div>
 
       <Separator />
 
       <div className="flex justify-between">
-        {prevPart ? (
+        {prevPart && !prevPart.locked ? (
           <Button variant="outline" asChild>
-            <Link href={`/course/${prevPart}`}>
+            <Link href={`/course/${prevPart.id}`}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Частина {prevPart}
+              {prevPart.title}
             </Link>
           </Button>
         ) : (
           <div />
         )}
-        {nextPart ? (
+        {nextPart && !nextPart.locked ? (
           <Button asChild>
-            <Link href={`/course/${nextPart}`}>
-              Частина {nextPart}
+            <Link href={`/course/${nextPart.id}`}>
+              {nextPart.title}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
           </Button>
