@@ -46,10 +46,16 @@ export default function RootLayout({
   return (
     <html lang="uk" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background flex flex-col`}
       >
         <Header />
-        <main className="container py-6">{children}</main>
+        <main className="flex-1 container max-w-5xl mx-auto py-6 px-4">{children}</main>
+        <footer className="border-t py-4 mt-auto">
+          <div className="container max-w-5xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm text-muted-foreground">
+            <div>Prompt Guide v1.0.0</div>
+            <div>Оновлено: 3 лютого 2025</div>
+          </div>
+        </footer>
         <Toaster position="bottom-center" />
       </body>
     </html>

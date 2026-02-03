@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Lock, Lightbulb } from "lucide-react";
 import { courseContent } from "@/data/course-content";
 import { CopyButton } from "@/components/copy-button";
+import { CourseCompleteButton } from "@/components/course-complete-button";
 
 export default async function CoursePartPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -112,31 +113,35 @@ export default async function CoursePartPage({ params }: { params: Promise<{ id:
 
       <Separator />
 
-      <div className="flex justify-between">
-        {prevPart && !prevPart.locked ? (
-          <Button variant="outline" asChild>
-            <Link href={`/course/${prevPart.id}`}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {prevPart.title}
-            </Link>
-          </Button>
-        ) : (
-          <div />
-        )}
-        {nextPart && !nextPart.locked ? (
-          <Button asChild>
-            <Link href={`/course/${nextPart.id}`}>
-              {nextPart.title}
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Link>
-          </Button>
-        ) : (
-          <Button variant="outline" asChild>
-            <Link href="/course">
-              Повернутися до курсу
-            </Link>
-          </Button>
-        )}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <CourseCompleteButton partId={part.id} partTitle={part.title} />
+        
+        <div className="flex gap-2">
+          {prevPart && !prevPart.locked ? (
+            <Button variant="outline" asChild>
+              <Link href={`/course/${prevPart.id}`}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">{prevPart.title}</span>
+                <span className="sm:hidden">Назад</span>
+              </Link>
+            </Button>
+          ) : null}
+          {nextPart && !nextPart.locked ? (
+            <Button asChild>
+              <Link href={`/course/${nextPart.id}`}>
+                <span className="hidden sm:inline">{nextPart.title}</span>
+                <span className="sm:hidden">Далі</span>
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Link>
+            </Button>
+          ) : (
+            <Button variant="outline" asChild>
+              <Link href="/course">
+                Повернутися до курсу
+              </Link>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

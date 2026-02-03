@@ -10,6 +10,10 @@ interface AppState {
   addFavorite: (id: string) => void;
   removeFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
+  completedParts: string[];
+  markPartComplete: (partId: string) => void;
+  markPartIncomplete: (partId: string) => void;
+  isPartComplete: (partId: string) => boolean;
 }
 
 export const useAppStore = create<AppState>()(
@@ -25,6 +29,16 @@ export const useAppStore = create<AppState>()(
         favorites: state.favorites.filter((f) => f !== id) 
       })),
       isFavorite: (id) => get().favorites.includes(id),
+      completedParts: [],
+      markPartComplete: (partId) => set((state) => ({
+        completedParts: state.completedParts.includes(partId) 
+          ? state.completedParts 
+          : [...state.completedParts, partId]
+      })),
+      markPartIncomplete: (partId) => set((state) => ({
+        completedParts: state.completedParts.filter((p) => p !== partId)
+      })),
+      isPartComplete: (partId) => get().completedParts.includes(partId),
     }),
     {
       name: 'prompt-guide-storage',
