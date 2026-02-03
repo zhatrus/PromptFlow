@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight, Lock, Lightbulb } from "lucide-react";
 import { courseContent } from "@/data/course-content";
 import { CopyButton } from "@/components/copy-button";
 import { CourseCompleteButton } from "@/components/course-complete-button";
+import { MarkdownContent } from "@/components/markdown-content";
 
 export default async function CoursePartPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -78,7 +79,7 @@ export default async function CoursePartPage({ params }: { params: Promise<{ id:
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="whitespace-pre-line">{technique.content}</p>
+              <MarkdownContent content={technique.content} />
               
               {technique.codeExamples && technique.codeExamples.length > 0 && (
                 <div className="space-y-3">
