@@ -55,7 +55,7 @@ export default function RootLayout({
         <footer className="border-t py-4 mt-auto">
           <div className="container max-w-5xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm text-muted-foreground">
             <div>Prompt Guide v1.0.0</div>
-            <div>Оновлено: 3 лютого 2025</div>
+            <div>Оновлено: 3 лютого 2026</div>
           </div>
         </footer>
         <Toaster position="bottom-center" />
