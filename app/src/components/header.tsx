@@ -47,7 +47,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container max-w-5xl mx-auto flex h-14 items-center px-4">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="md:hidden">
@@ -56,22 +56,25 @@ export function Header() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-72">
-            <nav className="flex flex-col gap-4 mt-8">
-              {navigation.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={`text-lg font-medium transition-colors hover:text-primary ${
-                    pathname === item.href || pathname.startsWith(item.href + '/')
-                      ? 'text-primary'
-                      : 'text-muted-foreground'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-lg font-semibold">Навігація</h2>
+              <nav className="flex flex-col gap-4">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={`text-lg font-medium transition-colors hover:text-primary ${
+                      pathname === item.href || pathname.startsWith(item.href + '/')
+                        ? 'text-primary'
+                        : 'text-muted-foreground'
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+            </div>
           </SheetContent>
         </Sheet>
 
