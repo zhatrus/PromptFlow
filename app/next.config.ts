@@ -6,9 +6,22 @@ const withPWA = withPWAInit({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
-  disable: process.env.NODE_ENV === "development",
+  disable: false, // Вмикаємо PWA і в development для тестування
   workboxOptions: {
-    disableDevLogs: true,
+    disableDevLogs: false, // Вмикаємо логи для дебагу
+    runtimeCaching: [
+      {
+        urlPattern: /^https?.*/,
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'offlineCache',
+          expiration: {
+            maxEntries: 200,
+            maxAgeSeconds: 24 * 60 * 60, // 24 години
+          },
+        },
+      },
+    ],
   },
 });
 
